@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Notas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .note {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .actions {
+            margin-top: 10px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+        .fecha{
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Lista de Notas</h1>
+    <a href="{% url 'crear_nota' %}">
+        <button>Crear Nueva Nota</button>
+    </a>
+
+    {% for nota in notas %}
+    <div class="note">
+        <h3>{{ nota.titulo }}</h3>
+        <p>{{ nota.contenido }}</p>
+        <p class="fecha">Creada el {{nota.fecha_creacion|date:"D d M Y H:i:s"}}</p>
+        <div class="actions">
+            <a href="{% url 'editar_nota' nota.id %}">
+                <button>Editar</button>
+            </a>
+            <form method="POST" action="{% url 'eliminar_nota' nota.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Eliminar</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <p>No hay notas disponibles.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>
+
